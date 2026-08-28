@@ -6,8 +6,6 @@ date: 2026-08-28
 
 ## What We Did
 
-<!-- CHANGE THIS: replace with your own notes -->
-
 Set up the portfolio workflow: made a repository from a template, cloned it with
 GitHub Desktop, edited files in RStudio, rendered with Quarto, and published to
 GitHub Pages.
@@ -35,11 +33,10 @@ sessionInfo()$R.version$version.string
 
 <!-- CHANGE THIS: 3-4 sentences -->
 
-What I want out of this course:
+What I want out of this course: To feel more comfortable using data and build confidence in learning new tools.
 
-One thing I'm nervous about:
+One thing I'm nervous about: Building proficiency in coding fast enough to be able to keep up with assignments.
 
 ## Questions I Still Have
 
--
--
+None yet!
