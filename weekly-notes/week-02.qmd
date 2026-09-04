@@ -1,6 +1,6 @@
 ---
 title: "Week 2: Census Data"
-description: "One line about this page."
+description: "Tidycensus Refresher"
 date: 2026-09-05
 ---
 ## What We Did 
@@ -36,5 +36,8 @@ generally want data in wide format
 
 ## Reflection
 
+Super helpful refresher!
+
 ## Questions I still have 
 
+Wide versus long outputs are super confusing to me. If long outputs are less helpful, why are they the default?
