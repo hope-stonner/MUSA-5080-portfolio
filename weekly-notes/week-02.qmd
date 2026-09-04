@@ -5,7 +5,34 @@ date: 2026-09-05
 ---
 ## What We Did 
 
+Reviewed R basics including dplyr and tidycensus. 
+
 ## Key Concepts 
+
+dplyr review: 
+filter() -> picks rows
+select() -> picks columns 
+mutate() -> adds a new computed column 
+arrange() -> change order of rows (asc, desc, etc.)
+group_by() + summarize () -> many rows become few
+
+tidycensus review: 
+load_variables() -> loading census variable identifiers
+
+GEOID -- stored as a string: 
+- first 2 # = state
+- second 2 # = county
+- final digits are scale = tract, block group
+
+data <- get_acs (geography = "county", 
+                variables = c("variable", "variable"), 
+                state = "PA", 
+                year = 2023, 
+                survey = "acs5", 
+                output = "wide")
+                
+generally want data in wide format 
+                
 
 ## Reflection
 
