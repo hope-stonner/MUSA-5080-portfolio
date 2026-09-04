@@ -1,33 +1,5 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Home",
-    "section": "",
-    "text": "Welcome to my portfolio for MUSA 5080: Public Policy Analytics at the University of Pennsylvania.\nThis site documents my work in the Master of Urban Spatial Analytics program — weekly notes, course assignments, and a final project applying data analysis to urban policy questions.\n\n\n\nI’m a student in the MCP program at Penn. My background is in [YOUR BACKGROUND], and I’m interested in [YOUR INTERESTS].\n\n\n\n\nWeekly Notes — what I’m learning each week\nAssignments — analyses completed for the course\nAbout — more background and how to reach me\n\n\n\n\n\n\nEmail: your-email@upenn.edu\nGitHub: @your-username"
-  },
-  {
-    "objectID": "index.html#about-me",
-    "href": "index.html#about-me",
-    "title": "Home",
-    "section": "",
-    "text": "I’m a student in the MCP program at Penn. My background is in [YOUR BACKGROUND], and I’m interested in [YOUR INTERESTS]."
-  },
-  {
-    "objectID": "index.html#what-youll-find-here",
-    "href": "index.html#what-youll-find-here",
-    "title": "Home",
-    "section": "",
-    "text": "Weekly Notes — what I’m learning each week\nAssignments — analyses completed for the course\nAbout — more background and how to reach me"
-  },
-  {
-    "objectID": "index.html#get-in-touch",
-    "href": "index.html#get-in-touch",
-    "title": "Home",
-    "section": "",
-    "text": "Email: your-email@upenn.edu\nGitHub: @your-username"
-  },
-  {
     "objectID": "weekly-notes/week-01.html",
     "href": "weekly-notes/week-01.html",
     "title": "Week 1: Getting Set Up",
@@ -70,30 +42,37 @@
     "text": "Questions I Still Have\nI don’t feel confident in my file management practices. How does file organization for R projects, scripts, and data actually work?"
   },
   {
+    "objectID": "weekly-notes/index.html",
+    "href": "weekly-notes/index.html",
+    "title": "Weekly Notes",
+    "section": "",
+    "text": "Notes from each week of MUSA 5080. New entries appear here automatically — add a .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nWeek 2: Census Data\n\n\n\n\n\nOne line about this page.\n\n\n\n\n\nSep 5, 2026\n\n\n\n\n\n\n\nWeek 1: Getting Set Up\n\n\n\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nAug 28, 2026\n\n\n\n\n\n\nNo matching items"
+  },
+  {
     "objectID": "about.html",
     "href": "about.html",
-    "title": "About",
+    "title": "About Me",
     "section": "",
     "text": "Write a few paragraphs about yourself here: where you came from before MUSA, what drew you to urban spatial analytics, and what you’re hoping to do with it."
   },
   {
     "objectID": "about.html#background",
     "href": "about.html#background",
-    "title": "About",
+    "title": "About Me",
     "section": "",
     "text": "Write a few paragraphs about yourself here: where you came from before MUSA, what drew you to urban spatial analytics, and what you’re hoping to do with it."
   },
   {
     "objectID": "about.html#skills",
     "href": "about.html#skills",
-    "title": "About",
+    "title": "About Me",
     "section": "Skills",
     "text": "Skills\n\n\nLanguages & Tools: R, Quarto, Git\nSpatial: (add as you learn)\nData: US Census / ACS via tidycensus"
   },
   {
     "objectID": "about.html#contact",
     "href": "about.html#contact",
-    "title": "About",
+    "title": "About Me",
     "section": "Contact",
     "text": "Contact\n\n\nEmail: your-email@upenn.edu\nGitHub: @your-username"
   },
@@ -105,11 +84,32 @@
     "text": "Completed assignments for MUSA 5080. New assignments appear here automatically once you add the .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
-    "objectID": "weekly-notes/index.html",
-    "href": "weekly-notes/index.html",
-    "title": "Weekly Notes",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Home",
     "section": "",
-    "text": "Notes from each week of MUSA 5080. New entries appear here automatically — add a .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nWeek 2: Census Data\n\n\n\n\n\nOne line about this page.\n\n\n\n\n\nSep 5, 2026\n\n\n\n\n\n\n\nWeek 1: Getting Set Up\n\n\n\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nAug 28, 2026\n\n\n\n\n\n\nNo matching items"
+    "text": "Welcome to my portfolio for MUSA 5080: Public Policy Analytics at the University of Pennsylvania.\nThis site documents my work in the Master of Urban Spatial Analytics program — weekly notes, course assignments, and a final project applying data analysis to urban policy questions.\n\n\n\nI’m a student in the MCP program at Penn. My background is in health policy, and I’m interested in the intersection of land use and economic development.\n\n\n\n\nWeekly Notes — what I’m learning each week\nAssignments — analyses completed for the course\nAbout — more background and how to reach me\n\n\n\n\n\n\nEmail: your-email@upenn.edu\nGitHub: @your-username"
+  },
+  {
+    "objectID": "index.html#about-me",
+    "href": "index.html#about-me",
+    "title": "Home",
+    "section": "",
+    "text": "I’m a student in the MCP program at Penn. My background is in health policy, and I’m interested in the intersection of land use and economic development."
+  },
+  {
+    "objectID": "index.html#what-youll-find-here",
+    "href": "index.html#what-youll-find-here",
+    "title": "Home",
+    "section": "",
+    "text": "Weekly Notes — what I’m learning each week\nAssignments — analyses completed for the course\nAbout — more background and how to reach me"
+  },
+  {
+    "objectID": "index.html#get-in-touch",
+    "href": "index.html#get-in-touch",
+    "title": "Home",
+    "section": "",
+    "text": "Email: your-email@upenn.edu\nGitHub: @your-username"
   },
   {
     "objectID": "data/readme.html",
@@ -117,5 +117,26 @@
     "title": "",
     "section": "",
     "text": "Code\n\n\n\n\nData files for MUSA 5080\nDownload assignment data from Canvas and save it here. Do not rename the files! Have a nice day :)"
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#key-concepts",
+    "href": "weekly-notes/week-02.html#key-concepts",
+    "title": "Week 2: Census Data",
+    "section": "Key Concepts",
+    "text": "Key Concepts"
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#reflection",
+    "href": "weekly-notes/week-02.html#reflection",
+    "title": "Week 2: Census Data",
+    "section": "Reflection",
+    "text": "Reflection"
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#questions-i-still-have",
+    "href": "weekly-notes/week-02.html#questions-i-still-have",
+    "title": "Week 2: Census Data",
+    "section": "Questions I still have",
+    "text": "Questions I still have"
   }
 ]
