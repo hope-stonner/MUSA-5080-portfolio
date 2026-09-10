@@ -46,7 +46,7 @@
     "href": "weekly-notes/index.html",
     "title": "Weekly Notes",
     "section": "",
-    "text": "Notes from each week of MUSA 5080. New entries appear here automatically — add a .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nWeek 2: Census Data\n\n\n\n\n\nOne line about this page.\n\n\n\n\n\nSep 5, 2026\n\n\n\n\n\n\n\nWeek 1: Getting Set Up\n\n\n\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nAug 28, 2026\n\n\n\n\n\n\nNo matching items"
+    "text": "Notes from each week of MUSA 5080. New entries appear here automatically — add a .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nWeek 2: Census Data\n\n\n\n\n\nTidycensus Refresher\n\n\n\n\n\nSep 5, 2026\n\n\n\n\n\n\n\nWeek 1: Getting Set Up\n\n\n\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nAug 28, 2026\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
@@ -123,20 +123,34 @@
     "href": "weekly-notes/week-02.html#key-concepts",
     "title": "Week 2: Census Data",
     "section": "Key Concepts",
-    "text": "Key Concepts"
+    "text": "Key Concepts\ndplyr review: filter() -&gt; picks rows select() -&gt; picks columns mutate() -&gt; adds a new computed column arrange() -&gt; change order of rows (asc, desc, etc.) group_by() + summarize () -&gt; many rows become few\ntidycensus review: load_variables() -&gt; loading census variable identifiers\nGEOID – stored as a string: - first 2 # = state - second 2 # = county - final digits are scale = tract, block group\ndata &lt;- get_acs (geography = “county”, variables = c(“variable”, “variable”), state = “PA”, year = 2023, survey = “acs5”, output = “wide”)\ngenerally want data in wide format"
   },
   {
     "objectID": "weekly-notes/week-02.html#reflection",
     "href": "weekly-notes/week-02.html#reflection",
     "title": "Week 2: Census Data",
     "section": "Reflection",
-    "text": "Reflection"
+    "text": "Reflection\nSuper helpful refresher!"
   },
   {
     "objectID": "weekly-notes/week-02.html#questions-i-still-have",
     "href": "weekly-notes/week-02.html#questions-i-still-have",
     "title": "Week 2: Census Data",
     "section": "Questions I still have",
-    "text": "Questions I still have"
+    "text": "Questions I still have\nWide versus long outputs are super confusing to me. If long outputs are less helpful, why are they the default?"
+  },
+  {
+    "objectID": "weekly-notes/week-02.html",
+    "href": "weekly-notes/week-02.html",
+    "title": "Week 2: Census Data",
+    "section": "",
+    "text": "Reviewed R basics including dplyr and tidycensus."
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#what-we-did",
+    "href": "weekly-notes/week-02.html#what-we-did",
+    "title": "Week 2: Census Data",
+    "section": "",
+    "text": "Reviewed R basics including dplyr and tidycensus."
   }
 ]
