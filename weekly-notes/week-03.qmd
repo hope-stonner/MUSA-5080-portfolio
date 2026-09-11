@@ -5,108 +5,167 @@ date: 2026-09-11
 ---
 ## What We Did 
 
-Reviewed R basics including dplyr and tidycensus. 
+Reviewed ggplot and discussed navigating statistical uncertainty when using ACS data. 
 
-## Key Concepts 
+## Key Concepts
 
-Data Visualization: 
-- Anscombe's Quartet --> why visualization is important
+### Data Visualization
 
-Plot is a mapping from columns in your data to visual properties on your page. 
-("grammar of graphics" = "gg")
+- **Anscombe's Quartet** → why visualization is important.
+- A plot is a mapping from **columns in your data** to **visual properties** on the page.
+- "Grammar of Graphics" = "gg"
 
+### Mapping Data to Visual Properties
 
-Your Data:                   Page (Canvas):
+| Your Data | Page (Canvas) |
+|---|---|
+| `estimate` | Position on the y-axis |
+| `population` | Position on the x-axis |
+| `viability` | Color |
+| `MOE` | Size |
 
-estimate -------------------> position on the y-axis
-population -----------------> position on the x-axis 
-viability ------------------> color
-MOE ------------------------> size 
+### How `ggplot` Works
 
+1. `ggplot(data)` → creates a blank canvas
+2. `aes(...)` → aesthetic mappings — **NO DECORATING! Just business.**
+3. `geom_*()` → the shape/type of chart
 
-**How ggplot works**
+**Example:**
 
-1. p <- ggplot(data) -- creates a blank canvas
-2. aes(...) -- aesthetic mappings - NO DECORATING! Just business.
-3. geom_*() -- the shape/type of chart 
+```{r}
+#| eval: false
 
-
-ex. 
-
-ggplot(tract_data) + 
+ggplot(tract_data) +
   aes(x = population, y = moe_pct) +
-  geom_point() 
-  
-  
-What I want to know| GEOM
--------------------|------------------
-                   |
-how a variable is  | geom_histogram()
-spread             |
---------------------------------------
-how do two         |
-variables relate?  | geom_point()
---------------------------------------
-how do groups      | geom_col()
-compare?           | geom_boxplot()
---------------------------------------
-how do things      |
-change over time?  | geom_line() 
---------------------------------------
-how uncertain      |
-is a value?        | geom_errorbar() 
---------------------------------------
+  geom_point()
+```
 
-**Coefficient of Variation (CV)** 
+### Choosing a `geom`
 
-- relative measure of sampling error 
+| What I want to know | `geom` |
+|---|---|
+| How is a variable spread? | `geom_histogram()` |
+| How do two variables relate? | `geom_point()` |
+| How do groups compare? | `geom_col()` or `geom_boxplot()` |
+| How do things change over time? | `geom_line()` |
+| How uncertain is a value? | `geom_errorbar()` |
 
-standard error 
---------------    x 100   
-  estimate
-  
+## Coefficient of Variation (CV)
 
-Census Bureau = 15% is high reliability 
-                30% is high sampling error 
-                
+The **coefficient of variation (CV)** is a relative measure of sampling error.
 
-**Derived Uncertainty**
+$$
+CV = \frac{\text{Standard Error}}{\text{Estimate}} \times 100
+$$
 
-poverty rate = # in poverty <--- has an moe
-              -------------
-                  total     <--- has an moe
-                  
-tidycensus has built in functions to address this
-- moe_sum() --> adding estimates together 
-- moe_prop() --> one estimate as a share of another 
-- moe_ratio() --> pov #      one not a subset of the other 
-                  ----
-                  HH income 
-                  
-Change over TIME
+### Reliability
 
-1) issue: the overlapping intervals 
-   2019 - 2023, 2018-2023 --- these datasets share four years of the same data
- 
-   solution: compare with non-overlapping intervals --- 2014-2018 vs 2019-2023
-   
-2) issue: margins of error 
-   ex.  2014-2018 -- $45,000 w a moe of 8,000
-        2019-2023 -- $62,000 w a moe of 11,000
-        
-   solution: calculate standard error of difference 
-             SE difference = sqrt(SE1^2/1.645 + SE2^2/1.645)  
-      
-             z = (est1 - est2) / SE diff
-             
-Confidence Interval of Change 
+- **CV ≤ 15%** → relatively high reliability
+- **CV ≥ 30%** → high sampling error
 
-Difference +/- (1.645 * SEdiff)
-Interval  = 3,339 - 30,601  ---- this is our range, taking in low end and high end of estimate,                                    we can be 90% sure that incomes went up 
-             
- 
- 
+## Derived Uncertainty
 
+For a derived statistic such as the poverty rate:
+
+$$
+\text{Poverty Rate}
+=
+\frac{\text{Number in Poverty}}{\text{Total Population}}
+$$
+
+Both the numerator and denominator have their own margins of error.
+
+`tidycensus` has built-in functions to address this:
+
+- `moe_sum()` → adding estimates together
+- `moe_prop()` → one estimate as a share of another
+- `moe_ratio()` → ratio where one estimate is **not** a subset of the other
+
+For example:
+
+$$
+\frac{\text{Number in Poverty}}{\text{Household Income}}
+$$
+
+## Change Over Time
+
+### Issue 1: Overlapping Intervals
+
+Comparing overlapping ACS 5-year estimates is problematic because the datasets share multiple years of observations.
+
+For example:
+
+- 2018–2022
+- 2019–2023
+
+These datasets share **four years** of data.
+
+**Solution:** Compare non-overlapping intervals.
+
+For example:
+
+- 2014–2018
+- 2019–2023
+
+### Issue 2: Margins of Error
+
+Suppose:
+
+| Period | Estimate | MOE |
+|---|---:|---:|
+| 2014–2018 | $45,000 | $8,000 |
+| 2019–2023 | $62,000 | $11,000 |
+
+The difference between the point estimates is:
+
+$$
+\$62,000 - \$45,000 = \$17,000
+$$
+
+But we need to account for the uncertainty around both estimates.
+
+### Step 1: Convert MOE to Standard Error
+
+For ACS estimates using a 90% confidence level:
+
+$$
+SE = \frac{MOE}{1.645}
+$$
+
+### Step 2: Calculate the Standard Error of the Difference
+
+$$
+SE_{\text{diff}}
+=
+\sqrt{SE_1^2 + SE_2^2}
+$$
+
+### Step 3: Calculate the z-score
+
+$$
+z =
+\frac{Estimate_1 - Estimate_2}{SE_{\text{diff}}}
+$$
+
+The z-score tells us how large the observed difference is relative to its sampling uncertainty.
+
+## Confidence Interval of Change
+
+The confidence interval around the difference is:
+
+$$
+Difference \pm (1.645 \times SE_{\text{diff}})
+$$
+
+For example, suppose the resulting interval is:
+
+$$
+\$3,339 \text{ to } \$30,601
+$$
+
+Because the entire interval is **above zero**, we can be 90% confident that incomes increased.
+
+> **Interpretation:** The estimated increase is $17,000, and we can be 90% confident that the true increase falls between approximately $3,339 and $30,601.
 
 ## Reflection
 

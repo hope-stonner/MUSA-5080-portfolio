@@ -103,6 +103,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -163,7 +192,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#what-we-did" id="toc-what-we-did" class="nav-link active" data-scroll-target="#what-we-did">What We Did</a></li>
-  <li><a href="#key-concepts" id="toc-key-concepts" class="nav-link" data-scroll-target="#key-concepts">Key Concepts</a></li>
+  <li><a href="#key-concepts" id="toc-key-concepts" class="nav-link" data-scroll-target="#key-concepts">Key Concepts</a>
+  <ul class="collapse">
+  <li><a href="#data-visualization" id="toc-data-visualization" class="nav-link" data-scroll-target="#data-visualization">Data Visualization</a></li>
+  <li><a href="#mapping-data-to-visual-properties" id="toc-mapping-data-to-visual-properties" class="nav-link" data-scroll-target="#mapping-data-to-visual-properties">Mapping Data to Visual Properties</a></li>
+  <li><a href="#how-ggplot-works" id="toc-how-ggplot-works" class="nav-link" data-scroll-target="#how-ggplot-works">How <code>ggplot</code> Works</a></li>
+  <li><a href="#choosing-a-geom" id="toc-choosing-a-geom" class="nav-link" data-scroll-target="#choosing-a-geom">Choosing a <code>geom</code></a></li>
+  </ul></li>
+  <li><a href="#coefficient-of-variation-cv" id="toc-coefficient-of-variation-cv" class="nav-link" data-scroll-target="#coefficient-of-variation-cv">Coefficient of Variation (CV)</a>
+  <ul class="collapse">
+  <li><a href="#reliability" id="toc-reliability" class="nav-link" data-scroll-target="#reliability">Reliability</a></li>
+  </ul></li>
+  <li><a href="#derived-uncertainty" id="toc-derived-uncertainty" class="nav-link" data-scroll-target="#derived-uncertainty">Derived Uncertainty</a></li>
+  <li><a href="#change-over-time" id="toc-change-over-time" class="nav-link" data-scroll-target="#change-over-time">Change Over Time</a>
+  <ul class="collapse">
+  <li><a href="#issue-1-overlapping-intervals" id="toc-issue-1-overlapping-intervals" class="nav-link" data-scroll-target="#issue-1-overlapping-intervals">Issue 1: Overlapping Intervals</a></li>
+  <li><a href="#issue-2-margins-of-error" id="toc-issue-2-margins-of-error" class="nav-link" data-scroll-target="#issue-2-margins-of-error">Issue 2: Margins of Error</a></li>
+  <li><a href="#step-1-convert-moe-to-standard-error" id="toc-step-1-convert-moe-to-standard-error" class="nav-link" data-scroll-target="#step-1-convert-moe-to-standard-error">Step 1: Convert MOE to Standard Error</a></li>
+  <li><a href="#step-2-calculate-the-standard-error-of-the-difference" id="toc-step-2-calculate-the-standard-error-of-the-difference" class="nav-link" data-scroll-target="#step-2-calculate-the-standard-error-of-the-difference">Step 2: Calculate the Standard Error of the Difference</a></li>
+  <li><a href="#step-3-calculate-the-z-score" id="toc-step-3-calculate-the-z-score" class="nav-link" data-scroll-target="#step-3-calculate-the-z-score">Step 3: Calculate the z-score</a></li>
+  </ul></li>
+  <li><a href="#confidence-interval-of-change" id="toc-confidence-interval-of-change" class="nav-link" data-scroll-target="#confidence-interval-of-change">Confidence Interval of Change</a></li>
   <li><a href="#reflection" id="toc-reflection" class="nav-link" data-scroll-target="#reflection">Reflection</a></li>
   <li><a href="#questions-i-still-have" id="toc-questions-i-still-have" class="nav-link" data-scroll-target="#questions-i-still-have">Questions I still have</a></li>
   </ul>
@@ -204,80 +253,215 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="what-we-did" class="level2">
 <h2 class="anchored" data-anchor-id="what-we-did">What We Did</h2>
-<p>Reviewed R basics including dplyr and tidycensus.</p>
+<p>Reviewed ggplot and discussed navigating statistical uncertainty when using ACS data.</p>
 </section>
 <section id="key-concepts" class="level2">
 <h2 class="anchored" data-anchor-id="key-concepts">Key Concepts</h2>
-<p>Data Visualization: - Anscombe’s Quartet –&gt; why visualization is important</p>
-<p>Plot is a mapping from columns in your data to visual properties on your page. (“grammar of graphics” = “gg”)</p>
-<p>Your Data: Page (Canvas):</p>
-<p>estimate ——————-&gt; position on the y-axis population —————–&gt; position on the x-axis viability ——————&gt; color MOE ————————&gt; size</p>
-<p><strong>How ggplot works</strong></p>
+<section id="data-visualization" class="level3">
+<h3 class="anchored" data-anchor-id="data-visualization">Data Visualization</h3>
+<ul>
+<li><strong>Anscombe’s Quartet</strong> → why visualization is important.</li>
+<li>A plot is a mapping from <strong>columns in your data</strong> to <strong>visual properties</strong> on the page.</li>
+<li>“Grammar of Graphics” = “gg”</li>
+</ul>
+</section>
+<section id="mapping-data-to-visual-properties" class="level3">
+<h3 class="anchored" data-anchor-id="mapping-data-to-visual-properties">Mapping Data to Visual Properties</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Your Data</th>
+<th>Page (Canvas)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>estimate</code></td>
+<td>Position on the y-axis</td>
+</tr>
+<tr class="even">
+<td><code>population</code></td>
+<td>Position on the x-axis</td>
+</tr>
+<tr class="odd">
+<td><code>viability</code></td>
+<td>Color</td>
+</tr>
+<tr class="even">
+<td><code>MOE</code></td>
+<td>Size</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-ggplot-works" class="level3">
+<h3 class="anchored" data-anchor-id="how-ggplot-works">How <code>ggplot</code> Works</h3>
 <ol type="1">
-<li>p &lt;- ggplot(data) – creates a blank canvas</li>
-<li>aes(…) – aesthetic mappings - NO DECORATING! Just business.</li>
-<li>geom_*() – the shape/type of chart</li>
+<li><code>ggplot(data)</code> → creates a blank canvas</li>
+<li><code>aes(...)</code> → aesthetic mappings — <strong>NO DECORATING! Just business.</strong></li>
+<li><code>geom_*()</code> → the shape/type of chart</li>
 </ol>
-<p>ex.</p>
-<p>ggplot(tract_data) + aes(x = population, y = moe_pct) + geom_point()</p>
+<p><strong>Example:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tract_data) <span class="sc">+</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> population, <span class="at">y =</span> moe_pct) <span class="sc">+</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="choosing-a-geom" class="level3">
+<h3 class="anchored" data-anchor-id="choosing-a-geom">Choosing a <code>geom</code></h3>
 <table class="caption-top table">
 <thead>
 <tr class="header">
 <th>What I want to know</th>
-<th>GEOM</th>
+<th><code>geom</code></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td></td>
-<td></td>
+<td>How is a variable spread?</td>
+<td><code>geom_histogram()</code></td>
 </tr>
 <tr class="even">
-<td>how a variable is</td>
-<td>geom_histogram()</td>
+<td>How do two variables relate?</td>
+<td><code>geom_point()</code></td>
 </tr>
 <tr class="odd">
-<td>spread</td>
-<td></td>
+<td>How do groups compare?</td>
+<td><code>geom_col()</code> or <code>geom_boxplot()</code></td>
+</tr>
+<tr class="even">
+<td>How do things change over time?</td>
+<td><code>geom_line()</code></td>
+</tr>
+<tr class="odd">
+<td>How uncertain is a value?</td>
+<td><code>geom_errorbar()</code></td>
 </tr>
 </tbody>
 </table>
+</section>
+</section>
+<section id="coefficient-of-variation-cv" class="level2">
+<h2 class="anchored" data-anchor-id="coefficient-of-variation-cv">Coefficient of Variation (CV)</h2>
+<p>The <strong>coefficient of variation (CV)</strong> is a relative measure of sampling error.</p>
+<p><span class="math display">\[
+CV = \frac{\text{Standard Error}}{\text{Estimate}} \times 100
+\]</span></p>
+<section id="reliability" class="level3">
+<h3 class="anchored" data-anchor-id="reliability">Reliability</h3>
+<ul>
+<li><strong>CV ≤ 15%</strong> → relatively high reliability</li>
+<li><strong>CV ≥ 30%</strong> → high sampling error</li>
+</ul>
+</section>
+</section>
+<section id="derived-uncertainty" class="level2">
+<h2 class="anchored" data-anchor-id="derived-uncertainty">Derived Uncertainty</h2>
+<p>For a derived statistic such as the poverty rate:</p>
+<p><span class="math display">\[
+\text{Poverty Rate}
+=
+\frac{\text{Number in Poverty}}{\text{Total Population}}
+\]</span></p>
+<p>Both the numerator and denominator have their own margins of error.</p>
+<p><code>tidycensus</code> has built-in functions to address this:</p>
+<ul>
+<li><code>moe_sum()</code> → adding estimates together</li>
+<li><code>moe_prop()</code> → one estimate as a share of another</li>
+<li><code>moe_ratio()</code> → ratio where one estimate is <strong>not</strong> a subset of the other</li>
+</ul>
+<p>For example:</p>
+<p><span class="math display">\[
+\frac{\text{Number in Poverty}}{\text{Household Income}}
+\]</span></p>
+</section>
+<section id="change-over-time" class="level2">
+<h2 class="anchored" data-anchor-id="change-over-time">Change Over Time</h2>
+<section id="issue-1-overlapping-intervals" class="level3">
+<h3 class="anchored" data-anchor-id="issue-1-overlapping-intervals">Issue 1: Overlapping Intervals</h3>
+<p>Comparing overlapping ACS 5-year estimates is problematic because the datasets share multiple years of observations.</p>
+<p>For example:</p>
+<ul>
+<li>2018–2022</li>
+<li>2019–2023</li>
+</ul>
+<p>These datasets share <strong>four years</strong> of data.</p>
+<p><strong>Solution:</strong> Compare non-overlapping intervals.</p>
+<p>For example:</p>
+<ul>
+<li>2014–2018</li>
+<li>2019–2023</li>
+</ul>
+</section>
+<section id="issue-2-margins-of-error" class="level3">
+<h3 class="anchored" data-anchor-id="issue-2-margins-of-error">Issue 2: Margins of Error</h3>
+<p>Suppose:</p>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 54%">
-</colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">how do two | variables relate? | geom_point()</th>
+<th>Period</th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">MOE</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">how do groups | geom_col() compare? | geom_boxplot()</td>
+<td>2014–2018</td>
+<td style="text-align: right;">$45,000</td>
+<td style="text-align: right;">$8,000</td>
+</tr>
+<tr class="even">
+<td>2019–2023</td>
+<td style="text-align: right;">$62,000</td>
+<td style="text-align: right;">$11,000</td>
 </tr>
 </tbody>
 </table>
-<p>how do things | change over time? | geom_line() ————————————– how uncertain | is a value? | geom_errorbar() ————————————–</p>
-<p><strong>Coefficient of Variation (CV)</strong></p>
-<ul>
-<li>relative measure of sampling error</li>
-</ul>
-<p>standard error ————– x 100<br>
-estimate</p>
-<p>Census Bureau = 15% is high reliability 30% is high sampling error</p>
-<p><strong>Derived Uncertainty</strong></p>
-<p>poverty rate = # in poverty &lt;— has an moe ————- total &lt;— has an moe</p>
-<p>tidycensus has built in functions to address this - moe_sum() –&gt; adding estimates together - moe_prop() –&gt; one estimate as a share of another - moe_ratio() –&gt; pov # one not a subset of the other —- HH income</p>
-<p>Change over TIME</p>
-<ol type="1">
-<li><p>issue: the overlapping intervals 2019 - 2023, 2018-2023 — these datasets share four years of the same data</p>
-<p>solution: compare with non-overlapping intervals — 2014-2018 vs 2019-2023</p></li>
-<li><p>issue: margins of error ex. 2014-2018 – $45,000 w a moe of 8,000 2019-2023 – $62,000 w a moe of 11,000</p>
-<p>solution: calculate standard error of difference SE difference = sqrt(SE1^2/1.645 + SE2^2/1.645)</p>
-<pre><code>      z = (est1 - est2) / SE diff</code></pre></li>
-</ol>
-<p>Confidence Interval of Change</p>
-<p>Difference +/- (1.645 * SEdiff) Interval = 3,339 - 30,601 —- this is our range, taking in low end and high end of estimate, we can be 90% sure that incomes went up</p>
+<p>The difference between the point estimates is:</p>
+<p><span class="math display">\[
+\$62,000 - \$45,000 = \$17,000
+\]</span></p>
+<p>But we need to account for the uncertainty around both estimates.</p>
+</section>
+<section id="step-1-convert-moe-to-standard-error" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-convert-moe-to-standard-error">Step 1: Convert MOE to Standard Error</h3>
+<p>For ACS estimates using a 90% confidence level:</p>
+<p><span class="math display">\[
+SE = \frac{MOE}{1.645}
+\]</span></p>
+</section>
+<section id="step-2-calculate-the-standard-error-of-the-difference" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-calculate-the-standard-error-of-the-difference">Step 2: Calculate the Standard Error of the Difference</h3>
+<p><span class="math display">\[
+SE_{\text{diff}}
+=
+\sqrt{SE_1^2 + SE_2^2}
+\]</span></p>
+</section>
+<section id="step-3-calculate-the-z-score" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-calculate-the-z-score">Step 3: Calculate the z-score</h3>
+<p><span class="math display">\[
+z =
+\frac{Estimate_1 - Estimate_2}{SE_{\text{diff}}}
+\]</span></p>
+<p>The z-score tells us how large the observed difference is relative to its sampling uncertainty.</p>
+</section>
+</section>
+<section id="confidence-interval-of-change" class="level2">
+<h2 class="anchored" data-anchor-id="confidence-interval-of-change">Confidence Interval of Change</h2>
+<p>The confidence interval around the difference is:</p>
+<p><span class="math display">\[
+Difference \pm (1.645 \times SE_{\text{diff}})
+\]</span></p>
+<p>For example, suppose the resulting interval is:</p>
+<p><span class="math display">\[
+\$3,339 \text{ to } \$30,601
+\]</span></p>
+<p>Because the entire interval is <strong>above zero</strong>, we can be 90% confident that incomes increased.</p>
+<blockquote class="blockquote">
+<p><strong>Interpretation:</strong> The estimated increase is $17,000, and we can be 90% confident that the true increase falls between approximately $3,339 and $30,601.</p>
+</blockquote>
 </section>
 <section id="reflection" class="level2">
 <h2 class="anchored" data-anchor-id="reflection">Reflection</h2>
@@ -766,114 +950,174 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">## What We Did </span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>Reviewed R basics including dplyr and tidycensus. </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>Reviewed ggplot and discussed navigating statistical uncertainty when using ACS data. </span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key Concepts </span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key Concepts</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>Data Visualization: </span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Anscombe's Quartet --&gt; why visualization is important</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>Plot is a mapping from columns in your data to visual properties on your page. </span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>("grammar of graphics" = "gg")</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">### Data Visualization</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Anscombe's Quartet** → why visualization is important.</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A plot is a mapping from **columns in your data** to **visual properties** on the page.</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>"Grammar of Graphics" = "gg"</span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>Your Data:                   Page (Canvas):</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>estimate -------------------&gt; position on the y-axis</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>population -----------------&gt; position on the x-axis </span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>viability ------------------&gt; color</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>MOE ------------------------&gt; size </span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="fu">### Mapping Data to Visual Properties</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>| Your Data | Page (Canvas) |</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>|---|---|</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>| <span class="in">`estimate`</span> | Position on the y-axis |</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>| <span class="in">`population`</span> | Position on the x-axis |</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>| <span class="in">`viability`</span> | Color |</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>| <span class="in">`MOE`</span> | Size |</span>
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>**How ggplot works**</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="fu">### How `ggplot` Works</span></span>
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>p &lt;- ggplot(data) -- creates a blank canvas</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>aes(...) -- aesthetic mappings - NO DECORATING! Just business.</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>geom_*() -- the shape/type of chart </span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span><span class="in">`ggplot(data)`</span> → creates a blank canvas</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span><span class="in">`aes(...)`</span> → aesthetic mappings — **NO DECORATING! Just business.**</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span><span class="in">`geom_*()`</span> → the shape/type of chart</span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>ex. </span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>ggplot(tract_data) + </span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  aes(x = population, y = moe_pct) +</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  geom_point() </span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>What I want to know| GEOM</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>-------------------|------------------</span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>                   |</span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>how a variable is  | geom_histogram()</span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>spread             |</span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>--------------------------------------</span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>how do two         |</span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>variables relate?  | geom_point()</span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>--------------------------------------</span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>how do groups      | geom_col()</span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>compare?           | geom_boxplot()</span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>--------------------------------------</span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>how do things      |</span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>change over time?  | geom_line() </span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>--------------------------------------</span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>how uncertain      |</span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>is a value?        | geom_errorbar() </span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>--------------------------------------</span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>**Coefficient of Variation (CV)** </span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>relative measure of sampling error </span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>standard error </span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>--------------    x 100   </span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>  estimate</span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>Census Bureau = 15% is high reliability </span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>                30% is high sampling error </span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>**Derived Uncertainty**</span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>poverty rate = # in poverty &lt;--- has an moe</span>
-<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>              -------------</span>
-<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="in">                  total     &lt;--- has an moe</span></span>
-<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="in">                  </span></span>
-<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>tidycensus has built in functions to address this</span>
-<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>moe_sum() --&gt; adding estimates together </span>
-<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>moe_prop() --&gt; one estimate as a share of another </span>
-<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>moe_ratio() --&gt; pov #      one not a subset of the other </span>
-<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="in">                  ----</span></span>
-<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a><span class="in">                  HH income </span></span>
-<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a><span class="in">                  </span></span>
-<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>Change over TIME</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>**Example:**</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tract_data) <span class="sc">+</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> population, <span class="at">y =</span> moe_pct) <span class="sc">+</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="fu">### Choosing a `geom`</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>| What I want to know | <span class="in">`geom`</span> |</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>|---|---|</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>| How is a variable spread? | <span class="in">`geom_histogram()`</span> |</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>| How do two variables relate? | <span class="in">`geom_point()`</span> |</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>| How do groups compare? | <span class="in">`geom_col()`</span> or <span class="in">`geom_boxplot()`</span> |</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>| How do things change over time? | <span class="in">`geom_line()`</span> |</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>| How uncertain is a value? | <span class="in">`geom_errorbar()`</span> |</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="fu">## Coefficient of Variation (CV)</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>The **coefficient of variation (CV)** is a relative measure of sampling error.</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>CV = \frac{\text{Standard Error}}{\text{Estimate}} \times 100</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="fu">### Reliability</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**CV ≤ 15%** → relatively high reliability</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**CV ≥ 30%** → high sampling error</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="fu">## Derived Uncertainty</span></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>For a derived statistic such as the poverty rate:</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>\text{Poverty Rate}</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>=</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>\frac{\text{Number in Poverty}}{\text{Total Population}}</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>Both the numerator and denominator have their own margins of error.</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="in">`tidycensus`</span> has built-in functions to address this:</span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`moe_sum()`</span> → adding estimates together</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`moe_prop()`</span> → one estimate as a share of another</span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`moe_ratio()`</span> → ratio where one estimate is **not** a subset of the other</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>For example:</span>
 <span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>1) issue: the overlapping intervals </span>
-<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>   2019 - 2023, 2018-2023 --- these datasets share four years of the same data</span>
-<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>   solution: compare with non-overlapping intervals --- 2014-2018 vs 2019-2023</span>
-<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>   </span>
-<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a>2) issue: margins of error </span>
-<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>   ex.  2014-2018 -- $45,000 w a moe of 8,000</span>
-<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>        2019-2023 -- $62,000 w a moe of 11,000</span>
-<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>   solution: calculate standard error of difference </span>
-<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>             SE difference = sqrt(SE1^2/1.645 + SE2^2/1.645)  </span>
-<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a><span class="in">             z = (est1 - est2) / SE diff</span></span>
-<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a><span class="in">             </span></span>
-<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a>Confidence Interval of Change </span>
-<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a>Difference +/- (1.645 * SEdiff)</span>
-<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a>Interval  = 3,339 - 30,601  ---- this is our range, taking in low end and high end of estimate,                                    we can be 90% sure that incomes went up </span>
-<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a>             </span>
-<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reflection</span></span>
-<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>\frac{\text{Number in Poverty}}{\text{Household Income}}</span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a><span class="fu">## Change Over Time</span></span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a><span class="fu">### Issue 1: Overlapping Intervals</span></span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>Comparing overlapping ACS 5-year estimates is problematic because the datasets share multiple years of observations.</span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>For example:</span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>2018–2022</span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>2019–2023</span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a>These datasets share **four years** of data.</span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a>**Solution:** Compare non-overlapping intervals.</span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a>For example:</span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>2014–2018</span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>2019–2023</span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a><span class="fu">### Issue 2: Margins of Error</span></span>
 <span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a><span class="fu">## Questions I still have </span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a>Suppose:</span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a>| Period | Estimate | MOE |</span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a>|---|---:|---:|</span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a>| 2014–2018 | $45,000 | $8,000 |</span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a>| 2019–2023 | $62,000 | $11,000 |</span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a>The difference between the point estimates is:</span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a>\$62,000 - \$45,000 = \$17,000</span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a>But we need to account for the uncertainty around both estimates.</span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 1: Convert MOE to Standard Error</span></span>
+<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a>For ACS estimates using a 90% confidence level:</span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a>SE = \frac{MOE}{1.645}</span>
+<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: Calculate the Standard Error of the Difference</span></span>
+<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a>SE_{\text{diff}}</span>
+<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a>=</span>
+<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a>\sqrt{SE_1^2 + SE_2^2}</span>
+<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 3: Calculate the z-score</span></span>
+<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a>z =</span>
+<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a>\frac{Estimate_1 - Estimate_2}{SE_{\text{diff}}}</span>
+<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a>The z-score tells us how large the observed difference is relative to its sampling uncertainty.</span>
+<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a><span class="fu">## Confidence Interval of Change</span></span>
+<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a>The confidence interval around the difference is:</span>
+<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a>Difference \pm (1.645 \times SE_{\text{diff}})</span>
+<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a>For example, suppose the resulting interval is:</span>
+<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a>\$3,339 \text{ to } \$30,601</span>
+<span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a>Because the entire interval is **above zero**, we can be 90% confident that incomes increased.</span>
+<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **Interpretation:** The estimated increase is $17,000, and we can be 90% confident that the true increase falls between approximately $3,339 and $30,601.</span></span>
+<span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-172"><a href="#cb2-172" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reflection</span></span>
+<span id="cb2-173"><a href="#cb2-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-174"><a href="#cb2-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-175"><a href="#cb2-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-176"><a href="#cb2-176" aria-hidden="true" tabindex="-1"></a><span class="fu">## Questions I still have </span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

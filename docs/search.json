@@ -1,5 +1,75 @@
 [
   {
+    "objectID": "weekly-notes/index.html",
+    "href": "weekly-notes/index.html",
+    "title": "Weekly Notes",
+    "section": "",
+    "text": "Notes from each week of MUSA 5080. New entries appear here automatically — add a .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nWeek 3: Data Visualization and Navigating Statistical Uncertainty\n\n\n\n\n\nggplot and more MOEs\n\n\n\n\n\nSep 11, 2026\n\n\n\n\n\n\n\nWeek 2: Census Data\n\n\n\n\n\nTidycensus Refresher\n\n\n\n\n\nSep 5, 2026\n\n\n\n\n\n\n\nWeek 1: Getting Set Up\n\n\n\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nAug 28, 2026\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "weekly-notes/week-03.html",
+    "href": "weekly-notes/week-03.html",
+    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
+    "section": "",
+    "text": "Reviewed ggplot and discussed navigating statistical uncertainty when using ACS data."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#what-we-did",
+    "href": "weekly-notes/week-03.html#what-we-did",
+    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
+    "section": "",
+    "text": "Reviewed ggplot and discussed navigating statistical uncertainty when using ACS data."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#key-concepts",
+    "href": "weekly-notes/week-03.html#key-concepts",
+    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
+    "section": "Key Concepts",
+    "text": "Key Concepts\n\nData Visualization\n\nAnscombe’s Quartet → why visualization is important.\nA plot is a mapping from columns in your data to visual properties on the page.\n“Grammar of Graphics” = “gg”\n\n\n\nMapping Data to Visual Properties\n\n\n\nYour Data\nPage (Canvas)\n\n\n\n\nestimate\nPosition on the y-axis\n\n\npopulation\nPosition on the x-axis\n\n\nviability\nColor\n\n\nMOE\nSize\n\n\n\n\n\nHow ggplot Works\n\nggplot(data) → creates a blank canvas\naes(...) → aesthetic mappings — NO DECORATING! Just business.\ngeom_*() → the shape/type of chart\n\nExample:\n\nggplot(tract_data) +\n  aes(x = population, y = moe_pct) +\n  geom_point()\n\n\n\nChoosing a geom\n\n\n\nWhat I want to know\ngeom\n\n\n\n\nHow is a variable spread?\ngeom_histogram()\n\n\nHow do two variables relate?\ngeom_point()\n\n\nHow do groups compare?\ngeom_col() or geom_boxplot()\n\n\nHow do things change over time?\ngeom_line()\n\n\nHow uncertain is a value?\ngeom_errorbar()"
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#coefficient-of-variation-cv",
+    "href": "weekly-notes/week-03.html#coefficient-of-variation-cv",
+    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
+    "section": "Coefficient of Variation (CV)",
+    "text": "Coefficient of Variation (CV)\nThe coefficient of variation (CV) is a relative measure of sampling error.\n\\[\nCV = \\frac{\\text{Standard Error}}{\\text{Estimate}} \\times 100\n\\]\n\nReliability\n\nCV ≤ 15% → relatively high reliability\nCV ≥ 30% → high sampling error"
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#derived-uncertainty",
+    "href": "weekly-notes/week-03.html#derived-uncertainty",
+    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
+    "section": "Derived Uncertainty",
+    "text": "Derived Uncertainty\nFor a derived statistic such as the poverty rate:\n\\[\n\\text{Poverty Rate}\n=\n\\frac{\\text{Number in Poverty}}{\\text{Total Population}}\n\\]\nBoth the numerator and denominator have their own margins of error.\ntidycensus has built-in functions to address this:\n\nmoe_sum() → adding estimates together\nmoe_prop() → one estimate as a share of another\nmoe_ratio() → ratio where one estimate is not a subset of the other\n\nFor example:\n\\[\n\\frac{\\text{Number in Poverty}}{\\text{Household Income}}\n\\]"
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#change-over-time",
+    "href": "weekly-notes/week-03.html#change-over-time",
+    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
+    "section": "Change Over Time",
+    "text": "Change Over Time\n\nIssue 1: Overlapping Intervals\nComparing overlapping ACS 5-year estimates is problematic because the datasets share multiple years of observations.\nFor example:\n\n2018–2022\n2019–2023\n\nThese datasets share four years of data.\nSolution: Compare non-overlapping intervals.\nFor example:\n\n2014–2018\n2019–2023\n\n\n\nIssue 2: Margins of Error\nSuppose:\n\n\n\nPeriod\nEstimate\nMOE\n\n\n\n\n2014–2018\n$45,000\n$8,000\n\n\n2019–2023\n$62,000\n$11,000\n\n\n\nThe difference between the point estimates is:\n\\[\n\\$62,000 - \\$45,000 = \\$17,000\n\\]\nBut we need to account for the uncertainty around both estimates.\n\n\nStep 1: Convert MOE to Standard Error\nFor ACS estimates using a 90% confidence level:\n\\[\nSE = \\frac{MOE}{1.645}\n\\]\n\n\nStep 2: Calculate the Standard Error of the Difference\n\\[\nSE_{\\text{diff}}\n=\n\\sqrt{SE_1^2 + SE_2^2}\n\\]\n\n\nStep 3: Calculate the z-score\n\\[\nz =\n\\frac{Estimate_1 - Estimate_2}{SE_{\\text{diff}}}\n\\]\nThe z-score tells us how large the observed difference is relative to its sampling uncertainty."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#confidence-interval-of-change",
+    "href": "weekly-notes/week-03.html#confidence-interval-of-change",
+    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
+    "section": "Confidence Interval of Change",
+    "text": "Confidence Interval of Change\nThe confidence interval around the difference is:\n\\[\nDifference \\pm (1.645 \\times SE_{\\text{diff}})\n\\]\nFor example, suppose the resulting interval is:\n\\[\n\\$3,339 \\text{ to } \\$30,601\n\\]\nBecause the entire interval is above zero, we can be 90% confident that incomes increased.\n\nInterpretation: The estimated increase is $17,000, and we can be 90% confident that the true increase falls between approximately $3,339 and $30,601."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#reflection",
+    "href": "weekly-notes/week-03.html#reflection",
+    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
+    "section": "Reflection",
+    "text": "Reflection"
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#questions-i-still-have",
+    "href": "weekly-notes/week-03.html#questions-i-still-have",
+    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
+    "section": "Questions I still have",
+    "text": "Questions I still have"
+  },
+  {
     "objectID": "weekly-notes/week-01.html",
     "href": "weekly-notes/week-01.html",
     "title": "Week 1: Getting Set Up",
@@ -40,76 +110,6 @@
     "title": "Week 1: Getting Set Up",
     "section": "Questions I Still Have",
     "text": "Questions I Still Have\nI don’t feel confident in my file management practices. How does file organization for R projects, scripts, and data actually work?"
-  },
-  {
-    "objectID": "weekly-notes/week-02.html",
-    "href": "weekly-notes/week-02.html",
-    "title": "Week 2: Census Data",
-    "section": "",
-    "text": "Reviewed R basics including dplyr and tidycensus."
-  },
-  {
-    "objectID": "weekly-notes/week-02.html#what-we-did",
-    "href": "weekly-notes/week-02.html#what-we-did",
-    "title": "Week 2: Census Data",
-    "section": "",
-    "text": "Reviewed R basics including dplyr and tidycensus."
-  },
-  {
-    "objectID": "weekly-notes/week-02.html#key-concepts",
-    "href": "weekly-notes/week-02.html#key-concepts",
-    "title": "Week 2: Census Data",
-    "section": "Key Concepts",
-    "text": "Key Concepts\ndplyr review: filter() -&gt; picks rows select() -&gt; picks columns mutate() -&gt; adds a new computed column arrange() -&gt; change order of rows (asc, desc, etc.) group_by() + summarize () -&gt; many rows become few\ntidycensus review: load_variables() -&gt; loading census variable identifiers\nGEOID – stored as a string: - first 2 # = state - second 2 # = county - final digits are scale = tract, block group\ndata &lt;- get_acs (geography = “county”, variables = c(“variable”, “variable”), state = “PA”, year = 2023, survey = “acs5”, output = “wide”)\ngenerally want data in wide format"
-  },
-  {
-    "objectID": "weekly-notes/week-02.html#reflection",
-    "href": "weekly-notes/week-02.html#reflection",
-    "title": "Week 2: Census Data",
-    "section": "Reflection",
-    "text": "Reflection\nSuper helpful refresher!"
-  },
-  {
-    "objectID": "weekly-notes/week-02.html#questions-i-still-have",
-    "href": "weekly-notes/week-02.html#questions-i-still-have",
-    "title": "Week 2: Census Data",
-    "section": "Questions I still have",
-    "text": "Questions I still have\nWide versus long outputs are super confusing to me. If long outputs are less helpful, why are they the default?"
-  },
-  {
-    "objectID": "data/readme.html",
-    "href": "data/readme.html",
-    "title": "",
-    "section": "",
-    "text": "Code\n\n\n\n\nData files for MUSA 5080\nDownload assignment data from Canvas and save it here. Do not rename the files! Have a nice day :)"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Home",
-    "section": "",
-    "text": "Welcome to my portfolio for MUSA 5080: Public Policy Analytics at the University of Pennsylvania.\nThis site documents my work in the Master of Urban Spatial Analytics program — weekly notes, course assignments, and a final project applying data analysis to urban policy questions.\n\n\n\nI’m a student in the MCP program at Penn. My background is in health policy, and I’m interested in the intersection of land use and economic development.\n\n\n\n\nWeekly Notes — what I’m learning each week\nAssignments — analyses completed for the course\nAbout — more background and how to reach me\n\n\n\n\n\n\nEmail: your-email@upenn.edu\nGitHub: @your-username"
-  },
-  {
-    "objectID": "index.html#about-me",
-    "href": "index.html#about-me",
-    "title": "Home",
-    "section": "",
-    "text": "I’m a student in the MCP program at Penn. My background is in health policy, and I’m interested in the intersection of land use and economic development."
-  },
-  {
-    "objectID": "index.html#what-youll-find-here",
-    "href": "index.html#what-youll-find-here",
-    "title": "Home",
-    "section": "",
-    "text": "Weekly Notes — what I’m learning each week\nAssignments — analyses completed for the course\nAbout — more background and how to reach me"
-  },
-  {
-    "objectID": "index.html#get-in-touch",
-    "href": "index.html#get-in-touch",
-    "title": "Home",
-    "section": "",
-    "text": "Email: your-email@upenn.edu\nGitHub: @your-username"
   },
   {
     "objectID": "assignments/assignment2.html",
@@ -175,80 +175,17 @@
     "text": "What this means for policy\nIn Colorado, there is the least amount of information about sparsely populated counties across the state. This includes small communities in the Eastern Plains (including Bent County, Crowley County, and Cheyenne County), parts of rural Southwestern Colorado (including Dolores County, San Juan County, Hinsdale County, and Mineral County), and some communities along the Northern section of the state, bordering Wyoming (Jackson County) and Nebraska (Sedgwick County). These counties had an average of 6,131 residents, with some having as few as 690 residents (San Juan County). There is less reliable data on less populous counties because ACS data is just a sample, and smaller places will have smaller samples and larger margins of error. Greater margins of error have the potential to pose major challenges for policymakers in anticipating a community’s needs and allocating resources or funds. Communities in less populous counties are far more likely to be undercounted. If policymakers rely solely on ACS data when making decisions such as fund allocation, there is a high likelihood of underestimating the size of the general population or more specific sub-populations, such as residents with a bachelor’s degree. This runs the risk of smaller counties not getting their fair share of state resources. In Colorado, smaller counties also tend to be rural, isolated, and less well-resourced than other parts of the state. Relying solely on ACS data for resource distribution could run the risk of exacerbating existing inequalities within the state."
   },
   {
+    "objectID": "data/readme.html",
+    "href": "data/readme.html",
+    "title": "",
+    "section": "",
+    "text": "Code\n\n\n\n\nData files for MUSA 5080\nDownload assignment data from Canvas and save it here. Do not rename the files! Have a nice day :)"
+  },
+  {
     "objectID": "assignments/index.html",
     "href": "assignments/index.html",
     "title": "Assignments",
     "section": "",
     "text": "Completed assignments for MUSA 5080. New assignments appear here automatically once you add the .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nAssignment 2: Who Do We Know the Least About?\n\n\nMeasuring uncertainty in American Community Survey data\n\n\n\n\n\n\n\n\nSep 4, 2026\n\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About Me",
-    "section": "",
-    "text": "Write a few paragraphs about yourself here: where you came from before MUSA, what drew you to urban spatial analytics, and what you’re hoping to do with it."
-  },
-  {
-    "objectID": "about.html#background",
-    "href": "about.html#background",
-    "title": "About Me",
-    "section": "",
-    "text": "Write a few paragraphs about yourself here: where you came from before MUSA, what drew you to urban spatial analytics, and what you’re hoping to do with it."
-  },
-  {
-    "objectID": "about.html#skills",
-    "href": "about.html#skills",
-    "title": "About Me",
-    "section": "Skills",
-    "text": "Skills\n\n\nLanguages & Tools: R, Quarto, Git\nSpatial: (add as you learn)\nData: US Census / ACS via tidycensus"
-  },
-  {
-    "objectID": "about.html#contact",
-    "href": "about.html#contact",
-    "title": "About Me",
-    "section": "Contact",
-    "text": "Contact\n\n\nEmail: your-email@upenn.edu\nGitHub: @your-username"
-  },
-  {
-    "objectID": "weekly-notes/index.html",
-    "href": "weekly-notes/index.html",
-    "title": "Weekly Notes",
-    "section": "",
-    "text": "Notes from each week of MUSA 5080. New entries appear here automatically — add a .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nWeek 3: Data Visualization and Navigating Statistical Uncertainty\n\n\n\n\n\nggplot and more MOEs\n\n\n\n\n\nSep 11, 2026\n\n\n\n\n\n\n\nWeek 2: Census Data\n\n\n\n\n\nTidycensus Refresher\n\n\n\n\n\nSep 5, 2026\n\n\n\n\n\n\n\nWeek 1: Getting Set Up\n\n\n\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nAug 28, 2026\n\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "weekly-notes/week-03.html",
-    "href": "weekly-notes/week-03.html",
-    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
-    "section": "",
-    "text": "Reviewed R basics including dplyr and tidycensus."
-  },
-  {
-    "objectID": "weekly-notes/week-03.html#what-we-did",
-    "href": "weekly-notes/week-03.html#what-we-did",
-    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
-    "section": "",
-    "text": "Reviewed R basics including dplyr and tidycensus."
-  },
-  {
-    "objectID": "weekly-notes/week-03.html#key-concepts",
-    "href": "weekly-notes/week-03.html#key-concepts",
-    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
-    "section": "Key Concepts",
-    "text": "Key Concepts\nData Visualization: - Anscombe’s Quartet –&gt; why visualization is important\nPlot is a mapping from columns in your data to visual properties on your page. (“grammar of graphics” = “gg”)\nYour Data: Page (Canvas):\nestimate ——————-&gt; position on the y-axis population —————–&gt; position on the x-axis viability ——————&gt; color MOE ————————&gt; size\nHow ggplot works\n\np &lt;- ggplot(data) – creates a blank canvas\naes(…) – aesthetic mappings - NO DECORATING! Just business.\ngeom_*() – the shape/type of chart\n\nex.\nggplot(tract_data) + aes(x = population, y = moe_pct) + geom_point()\n\n\n\nWhat I want to know\nGEOM\n\n\n\n\n\n\n\n\nhow a variable is\ngeom_histogram()\n\n\nspread\n\n\n\n\n\n\n\n\n\n\nhow do two | variables relate? | geom_point()\n\n\n\n\nhow do groups | geom_col() compare? | geom_boxplot()\n\n\n\nhow do things | change over time? | geom_line() ————————————– how uncertain | is a value? | geom_errorbar() ————————————–\nCoefficient of Variation (CV)\n\nrelative measure of sampling error\n\nstandard error ————– x 100\nestimate\nCensus Bureau = 15% is high reliability 30% is high sampling error\nDerived Uncertainty\npoverty rate = # in poverty &lt;— has an moe ————- total &lt;— has an moe\ntidycensus has built in functions to address this - moe_sum() –&gt; adding estimates together - moe_prop() –&gt; one estimate as a share of another - moe_ratio() –&gt; pov # one not a subset of the other —- HH income\nChange over TIME\n\nissue: the overlapping intervals 2019 - 2023, 2018-2023 — these datasets share four years of the same data\nsolution: compare with non-overlapping intervals — 2014-2018 vs 2019-2023\nissue: margins of error ex. 2014-2018 – $45,000 w a moe of 8,000 2019-2023 – $62,000 w a moe of 11,000\nsolution: calculate standard error of difference SE difference = sqrt(SE1^2/1.645 + SE2^2/1.645)\n      z = (est1 - est2) / SE diff\n\nConfidence Interval of Change\nDifference +/- (1.645 * SEdiff) Interval = 3,339 - 30,601 —- this is our range, taking in low end and high end of estimate, we can be 90% sure that incomes went up"
-  },
-  {
-    "objectID": "weekly-notes/week-03.html#reflection",
-    "href": "weekly-notes/week-03.html#reflection",
-    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
-    "section": "Reflection",
-    "text": "Reflection"
-  },
-  {
-    "objectID": "weekly-notes/week-03.html#questions-i-still-have",
-    "href": "weekly-notes/week-03.html#questions-i-still-have",
-    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
-    "section": "Questions I still have",
-    "text": "Questions I still have"
   }
 ]
