@@ -1,0 +1,116 @@
+---
+title: "Week 3: Data Visualization and Navigating Statistical Uncertainty"
+description: "ggplot and more MOEs"
+date: 2026-09-11
+---
+## What We Did 
+
+Reviewed R basics including dplyr and tidycensus. 
+
+## Key Concepts 
+
+Data Visualization: 
+- Anscombe's Quartet --> why visualization is important
+
+Plot is a mapping from columns in your data to visual properties on your page. 
+("grammar of graphics" = "gg")
+
+
+Your Data:                   Page (Canvas):
+
+estimate -------------------> position on the y-axis
+population -----------------> position on the x-axis 
+viability ------------------> color
+MOE ------------------------> size 
+
+
+**How ggplot works**
+
+1. p <- ggplot(data) -- creates a blank canvas
+2. aes(...) -- aesthetic mappings - NO DECORATING! Just business.
+3. geom_*() -- the shape/type of chart 
+
+
+ex. 
+
+ggplot(tract_data) + 
+  aes(x = population, y = moe_pct) +
+  geom_point() 
+  
+  
+What I want to know| GEOM
+-------------------|------------------
+                   |
+how a variable is  | geom_histogram()
+spread             |
+--------------------------------------
+how do two         |
+variables relate?  | geom_point()
+--------------------------------------
+how do groups      | geom_col()
+compare?           | geom_boxplot()
+--------------------------------------
+how do things      |
+change over time?  | geom_line() 
+--------------------------------------
+how uncertain      |
+is a value?        | geom_errorbar() 
+--------------------------------------
+
+**Coefficient of Variation (CV)** 
+
+- relative measure of sampling error 
+
+standard error 
+--------------    x 100   
+  estimate
+  
+
+Census Bureau = 15% is high reliability 
+                30% is high sampling error 
+                
+
+**Derived Uncertainty**
+
+poverty rate = # in poverty <--- has an moe
+              -------------
+                  total     <--- has an moe
+                  
+tidycensus has built in functions to address this
+- moe_sum() --> adding estimates together 
+- moe_prop() --> one estimate as a share of another 
+- moe_ratio() --> pov #      one not a subset of the other 
+                  ----
+                  HH income 
+                  
+Change over TIME
+
+1) issue: the overlapping intervals 
+   2019 - 2023, 2018-2023 --- these datasets share four years of the same data
+ 
+   solution: compare with non-overlapping intervals --- 2014-2018 vs 2019-2023
+   
+2) issue: margins of error 
+   ex.  2014-2018 -- $45,000 w a moe of 8,000
+        2019-2023 -- $62,000 w a moe of 11,000
+        
+   solution: calculate standard error of difference 
+             SE difference = sqrt(SE1^2/1.645 + SE2^2/1.645)  
+      
+             z = (est1 - est2) / SE diff
+             
+Confidence Interval of Change 
+
+Difference +/- (1.645 * SEdiff)
+Interval  = 3,339 - 30,601  ---- this is our range, taking in low end and high end of estimate,                                    we can be 90% sure that incomes went up 
+             
+ 
+ 
+
+
+## Reflection
+
+
+
+## Questions I still have 
+

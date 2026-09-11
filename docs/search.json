@@ -42,46 +42,46 @@
     "text": "Questions I Still Have\nI don’t feel confident in my file management practices. How does file organization for R projects, scripts, and data actually work?"
   },
   {
-    "objectID": "weekly-notes/index.html",
-    "href": "weekly-notes/index.html",
-    "title": "Weekly Notes",
+    "objectID": "weekly-notes/week-02.html",
+    "href": "weekly-notes/week-02.html",
+    "title": "Week 2: Census Data",
     "section": "",
-    "text": "Notes from each week of MUSA 5080. New entries appear here automatically — add a .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nWeek 2: Census Data\n\n\n\n\n\nTidycensus Refresher\n\n\n\n\n\nSep 5, 2026\n\n\n\n\n\n\n\nWeek 1: Getting Set Up\n\n\n\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nAug 28, 2026\n\n\n\n\n\n\nNo matching items"
+    "text": "Reviewed R basics including dplyr and tidycensus."
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About Me",
+    "objectID": "weekly-notes/week-02.html#what-we-did",
+    "href": "weekly-notes/week-02.html#what-we-did",
+    "title": "Week 2: Census Data",
     "section": "",
-    "text": "Write a few paragraphs about yourself here: where you came from before MUSA, what drew you to urban spatial analytics, and what you’re hoping to do with it."
+    "text": "Reviewed R basics including dplyr and tidycensus."
   },
   {
-    "objectID": "about.html#background",
-    "href": "about.html#background",
-    "title": "About Me",
+    "objectID": "weekly-notes/week-02.html#key-concepts",
+    "href": "weekly-notes/week-02.html#key-concepts",
+    "title": "Week 2: Census Data",
+    "section": "Key Concepts",
+    "text": "Key Concepts\ndplyr review: filter() -&gt; picks rows select() -&gt; picks columns mutate() -&gt; adds a new computed column arrange() -&gt; change order of rows (asc, desc, etc.) group_by() + summarize () -&gt; many rows become few\ntidycensus review: load_variables() -&gt; loading census variable identifiers\nGEOID – stored as a string: - first 2 # = state - second 2 # = county - final digits are scale = tract, block group\ndata &lt;- get_acs (geography = “county”, variables = c(“variable”, “variable”), state = “PA”, year = 2023, survey = “acs5”, output = “wide”)\ngenerally want data in wide format"
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#reflection",
+    "href": "weekly-notes/week-02.html#reflection",
+    "title": "Week 2: Census Data",
+    "section": "Reflection",
+    "text": "Reflection\nSuper helpful refresher!"
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#questions-i-still-have",
+    "href": "weekly-notes/week-02.html#questions-i-still-have",
+    "title": "Week 2: Census Data",
+    "section": "Questions I still have",
+    "text": "Questions I still have\nWide versus long outputs are super confusing to me. If long outputs are less helpful, why are they the default?"
+  },
+  {
+    "objectID": "data/readme.html",
+    "href": "data/readme.html",
+    "title": "",
     "section": "",
-    "text": "Write a few paragraphs about yourself here: where you came from before MUSA, what drew you to urban spatial analytics, and what you’re hoping to do with it."
-  },
-  {
-    "objectID": "about.html#skills",
-    "href": "about.html#skills",
-    "title": "About Me",
-    "section": "Skills",
-    "text": "Skills\n\n\nLanguages & Tools: R, Quarto, Git\nSpatial: (add as you learn)\nData: US Census / ACS via tidycensus"
-  },
-  {
-    "objectID": "about.html#contact",
-    "href": "about.html#contact",
-    "title": "About Me",
-    "section": "Contact",
-    "text": "Contact\n\n\nEmail: your-email@upenn.edu\nGitHub: @your-username"
-  },
-  {
-    "objectID": "assignments/index.html",
-    "href": "assignments/index.html",
-    "title": "Assignments",
-    "section": "",
-    "text": "Completed assignments for MUSA 5080. New assignments appear here automatically once you add the .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nAssignment 2: Who Do We Know the Least About?\n\n\nMeasuring uncertainty in American Community Survey data\n\n\n\n\n\n\n\n\nSep 4, 2026\n\n\n\n\n\n\nNo matching items"
+    "text": "Code\n\n\n\n\nData files for MUSA 5080\nDownload assignment data from Canvas and save it here. Do not rename the files! Have a nice day :)"
   },
   {
     "objectID": "index.html",
@@ -110,48 +110,6 @@
     "title": "Home",
     "section": "",
     "text": "Email: your-email@upenn.edu\nGitHub: @your-username"
-  },
-  {
-    "objectID": "data/readme.html",
-    "href": "data/readme.html",
-    "title": "",
-    "section": "",
-    "text": "Code\n\n\n\n\nData files for MUSA 5080\nDownload assignment data from Canvas and save it here. Do not rename the files! Have a nice day :)"
-  },
-  {
-    "objectID": "weekly-notes/week-02.html#key-concepts",
-    "href": "weekly-notes/week-02.html#key-concepts",
-    "title": "Week 2: Census Data",
-    "section": "Key Concepts",
-    "text": "Key Concepts\ndplyr review: filter() -&gt; picks rows select() -&gt; picks columns mutate() -&gt; adds a new computed column arrange() -&gt; change order of rows (asc, desc, etc.) group_by() + summarize () -&gt; many rows become few\ntidycensus review: load_variables() -&gt; loading census variable identifiers\nGEOID – stored as a string: - first 2 # = state - second 2 # = county - final digits are scale = tract, block group\ndata &lt;- get_acs (geography = “county”, variables = c(“variable”, “variable”), state = “PA”, year = 2023, survey = “acs5”, output = “wide”)\ngenerally want data in wide format"
-  },
-  {
-    "objectID": "weekly-notes/week-02.html#reflection",
-    "href": "weekly-notes/week-02.html#reflection",
-    "title": "Week 2: Census Data",
-    "section": "Reflection",
-    "text": "Reflection\nSuper helpful refresher!"
-  },
-  {
-    "objectID": "weekly-notes/week-02.html#questions-i-still-have",
-    "href": "weekly-notes/week-02.html#questions-i-still-have",
-    "title": "Week 2: Census Data",
-    "section": "Questions I still have",
-    "text": "Questions I still have\nWide versus long outputs are super confusing to me. If long outputs are less helpful, why are they the default?"
-  },
-  {
-    "objectID": "weekly-notes/week-02.html",
-    "href": "weekly-notes/week-02.html",
-    "title": "Week 2: Census Data",
-    "section": "",
-    "text": "Reviewed R basics including dplyr and tidycensus."
-  },
-  {
-    "objectID": "weekly-notes/week-02.html#what-we-did",
-    "href": "weekly-notes/week-02.html#what-we-did",
-    "title": "Week 2: Census Data",
-    "section": "",
-    "text": "Reviewed R basics including dplyr and tidycensus."
   },
   {
     "objectID": "assignments/assignment2.html",
@@ -215,5 +173,82 @@
     "title": "Assignment 2: Who Do We Know the Least About?",
     "section": "What this means for policy",
     "text": "What this means for policy\nIn Colorado, there is the least amount of information about sparsely populated counties across the state. This includes small communities in the Eastern Plains (including Bent County, Crowley County, and Cheyenne County), parts of rural Southwestern Colorado (including Dolores County, San Juan County, Hinsdale County, and Mineral County), and some communities along the Northern section of the state, bordering Wyoming (Jackson County) and Nebraska (Sedgwick County). These counties had an average of 6,131 residents, with some having as few as 690 residents (San Juan County). There is less reliable data on less populous counties because ACS data is just a sample, and smaller places will have smaller samples and larger margins of error. Greater margins of error have the potential to pose major challenges for policymakers in anticipating a community’s needs and allocating resources or funds. Communities in less populous counties are far more likely to be undercounted. If policymakers rely solely on ACS data when making decisions such as fund allocation, there is a high likelihood of underestimating the size of the general population or more specific sub-populations, such as residents with a bachelor’s degree. This runs the risk of smaller counties not getting their fair share of state resources. In Colorado, smaller counties also tend to be rural, isolated, and less well-resourced than other parts of the state. Relying solely on ACS data for resource distribution could run the risk of exacerbating existing inequalities within the state."
+  },
+  {
+    "objectID": "assignments/index.html",
+    "href": "assignments/index.html",
+    "title": "Assignments",
+    "section": "",
+    "text": "Completed assignments for MUSA 5080. New assignments appear here automatically once you add the .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nAssignment 2: Who Do We Know the Least About?\n\n\nMeasuring uncertainty in American Community Survey data\n\n\n\n\n\n\n\n\nSep 4, 2026\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About Me",
+    "section": "",
+    "text": "Write a few paragraphs about yourself here: where you came from before MUSA, what drew you to urban spatial analytics, and what you’re hoping to do with it."
+  },
+  {
+    "objectID": "about.html#background",
+    "href": "about.html#background",
+    "title": "About Me",
+    "section": "",
+    "text": "Write a few paragraphs about yourself here: where you came from before MUSA, what drew you to urban spatial analytics, and what you’re hoping to do with it."
+  },
+  {
+    "objectID": "about.html#skills",
+    "href": "about.html#skills",
+    "title": "About Me",
+    "section": "Skills",
+    "text": "Skills\n\n\nLanguages & Tools: R, Quarto, Git\nSpatial: (add as you learn)\nData: US Census / ACS via tidycensus"
+  },
+  {
+    "objectID": "about.html#contact",
+    "href": "about.html#contact",
+    "title": "About Me",
+    "section": "Contact",
+    "text": "Contact\n\n\nEmail: your-email@upenn.edu\nGitHub: @your-username"
+  },
+  {
+    "objectID": "weekly-notes/index.html",
+    "href": "weekly-notes/index.html",
+    "title": "Weekly Notes",
+    "section": "",
+    "text": "Notes from each week of MUSA 5080. New entries appear here automatically — add a .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nWeek 3: Data Visualization and Navigating Statistical Uncertainty\n\n\n\n\n\nggplot and more MOEs\n\n\n\n\n\nSep 11, 2026\n\n\n\n\n\n\n\nWeek 2: Census Data\n\n\n\n\n\nTidycensus Refresher\n\n\n\n\n\nSep 5, 2026\n\n\n\n\n\n\n\nWeek 1: Getting Set Up\n\n\n\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nAug 28, 2026\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "weekly-notes/week-03.html",
+    "href": "weekly-notes/week-03.html",
+    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
+    "section": "",
+    "text": "Reviewed R basics including dplyr and tidycensus."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#what-we-did",
+    "href": "weekly-notes/week-03.html#what-we-did",
+    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
+    "section": "",
+    "text": "Reviewed R basics including dplyr and tidycensus."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#key-concepts",
+    "href": "weekly-notes/week-03.html#key-concepts",
+    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
+    "section": "Key Concepts",
+    "text": "Key Concepts\nData Visualization: - Anscombe’s Quartet –&gt; why visualization is important\nPlot is a mapping from columns in your data to visual properties on your page. (“grammar of graphics” = “gg”)\nYour Data: Page (Canvas):\nestimate ——————-&gt; position on the y-axis population —————–&gt; position on the x-axis viability ——————&gt; color MOE ————————&gt; size\nHow ggplot works\n\np &lt;- ggplot(data) – creates a blank canvas\naes(…) – aesthetic mappings - NO DECORATING! Just business.\ngeom_*() – the shape/type of chart\n\nex.\nggplot(tract_data) + aes(x = population, y = moe_pct) + geom_point()\n\n\n\nWhat I want to know\nGEOM\n\n\n\n\n\n\n\n\nhow a variable is\ngeom_histogram()\n\n\nspread\n\n\n\n\n\n\n\n\n\n\nhow do two | variables relate? | geom_point()\n\n\n\n\nhow do groups | geom_col() compare? | geom_boxplot()\n\n\n\nhow do things | change over time? | geom_line() ————————————– how uncertain | is a value? | geom_errorbar() ————————————–\nCoefficient of Variation (CV)\n\nrelative measure of sampling error\n\nstandard error ————– x 100\nestimate\nCensus Bureau = 15% is high reliability 30% is high sampling error\nDerived Uncertainty\npoverty rate = # in poverty &lt;— has an moe ————- total &lt;— has an moe\ntidycensus has built in functions to address this - moe_sum() –&gt; adding estimates together - moe_prop() –&gt; one estimate as a share of another - moe_ratio() –&gt; pov # one not a subset of the other —- HH income\nChange over TIME\n\nissue: the overlapping intervals 2019 - 2023, 2018-2023 — these datasets share four years of the same data\nsolution: compare with non-overlapping intervals — 2014-2018 vs 2019-2023\nissue: margins of error ex. 2014-2018 – $45,000 w a moe of 8,000 2019-2023 – $62,000 w a moe of 11,000\nsolution: calculate standard error of difference SE difference = sqrt(SE1^2/1.645 + SE2^2/1.645)\n      z = (est1 - est2) / SE diff\n\nConfidence Interval of Change\nDifference +/- (1.645 * SEdiff) Interval = 3,339 - 30,601 —- this is our range, taking in low end and high end of estimate, we can be 90% sure that incomes went up"
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#reflection",
+    "href": "weekly-notes/week-03.html#reflection",
+    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
+    "section": "Reflection",
+    "text": "Reflection"
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#questions-i-still-have",
+    "href": "weekly-notes/week-03.html#questions-i-still-have",
+    "title": "Week 3: Data Visualization and Navigating Statistical Uncertainty",
+    "section": "Questions I still have",
+    "text": "Questions I still have"
   }
 ]
