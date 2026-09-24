@@ -1,0 +1,58 @@
+---
+title: "Week 4: Mapping in R"
+description: "No need for Arc!"
+date: 2026-09-18
+---
+## What We Did 
+
+ 
+
+## Key Concepts
+
+### Mapping in R 101 
+
+- **Geometry** → is sticky 
+-  **sf - simple features** →  R version of a spatial file 
+
+### Coordinate Reference Systems (CRS)
+
+Two families: 
+1. Geographic
+   - units, degrees 
+   - NAD83 + WGS84 -- GPS Standard 
+ 
+Making a 3D object 2D --> through projections
+- Potential Distortions:
+  Shapes
+  Areas
+  Distance
+  Direction
+  
+2. Projected
+
+Common CRS
+
+State planes , 
+
+UTMs
+- 60 zones, 6 degrees wide 
+- Measure in meters how far from the origin you are 
+
+**Important**
+st_set_crs() →  adding the correct label 
+st_transform() →  change the coordinate system
+
+good practice →  call st_crs(data) first to know the units, and CRS
+
+### st functions
+
+st_filter() → count the tracts
+st_intersection() → shapes change, more shapes just common area
+st_union() → everything combined
+st_join() → (stations, tracts)
+st_distance() → returns a matrix between stations and tracts
+
+
+
+## Questions I still have 
+

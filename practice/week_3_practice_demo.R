@@ -1,6 +1,8 @@
 library(tidyverse)
 library(tidycensus)
 
+
+
 county_data <- get_acs(
   geography = "county",
   variables = "B07012_002",
