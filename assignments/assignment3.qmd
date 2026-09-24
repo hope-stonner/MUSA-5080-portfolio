@@ -238,7 +238,8 @@ poverty_tested %>%
   geom_hline(yintercept = 0, linetype = "dashed") +
   coord_flip() +
   theme_minimal() +
-  labs(title = "Statistically significant change in poverty count by census tract in Philadelphia",
+  theme(axis.text.y = element_text(size = 5)) +
+  labs(title = "Statistically significant change in poverty count by census tract\nin Philadelphia",
        subtitle = "2006–2010 vs 2013–2017, ACS 5-year estimates",
        x = NULL, y = "Change in people below poverty level")
 ```  
