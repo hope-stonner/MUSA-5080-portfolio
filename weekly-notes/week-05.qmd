@@ -1,0 +1,52 @@
+---
+title: "Week 5: Linear Regression"
+description: "Using linear regression for prediction"
+date: 2026-09-25
+---
+## What We Did 
+
+ 
+
+## Key Concepts
+
+Machine learning 
+
+Ex. Predicting rents based on median income Where do rents exceed our expectation? 
+
+y = f(x) + e 
+
+rent = function unknown + everything else 
+
+**scale of rigid -> to flexible**
+   
+**rigid**
+-- linear 
+-- lasso/ridge 
+-- logistic (trying to predict a binary, a classification problem)
+-- trees + random forest
+-- boosting
+-- neural networks
+**flexible** 
+
+
+How to do this in R: 
+
+m1 <- lm(med_rent ~ med_inc, data = tracts)
+summary (m1)
+
+(intercept) of med_inc  -- will return: estimate, S.E., t-value, p-value 
+
+higher t-value, higher the confidence (greater than 1.96)
+
+Cross Validation (cv)
+
+k-fold - splits up the data 
+
+Risks of overfitting: 
+- trying to explain the explainable, not the unexplainable part of the model 
+
+How to pick features? 
+multicollinearity -> mostly harmless.. but check your prediction 
+
+## Questions I still have 
+
